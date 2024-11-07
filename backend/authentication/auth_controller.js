@@ -7,7 +7,7 @@ const {
 } = require("firebase/auth");
 
 exports.InitialSignUp = async (req, res) => {
-  const { email, confirmPassword, firstName, lastName } = req.body;
+  const { email, confirmPassword, firstName, lastName, school } = req.body;
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -17,10 +17,11 @@ exports.InitialSignUp = async (req, res) => {
     const user = userCredential.user;
 
     const userData = {
-      // college: college,
       email: email,
       firstName: firstName,
       lastName: lastName,
+      school: school,
+      createdAt: new Date(),
     };
 
     await setDoc(doc(db, "user", user.uid), userData);
