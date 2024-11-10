@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import SelectT from "./SelectCollege";
+import SelectCollege from "./SelectCollege";
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,29 +11,34 @@ const SignUp: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  // const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const [school, setSelectedCollege] = useState<string>("");
 
   const navigate = useNavigate();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSignUpSubmit = async (): Promise<void> => {
+    if (enterPassword !== confirmPassword) {
+      setMessage("Passwords do not match");
+      alert("Passwords do not match");
+      return;
+    }
+
     try {
       const response = await axios.post(`${BACKEND_URL}/auth/signup`, {
         email,
-        confirmPassword,
+        password: confirmPassword,
         firstName,
         lastName,
         school,
       });
       if (response.data.success) {
-        // setMessage("Signup successful");
-        navigate("/final_signup");
+        navigate(`/${response.data.user.uid}/final_signup`);
       } else {
-        // setMessage(response.data.message || "Sign-up failed");
+        setMessage(response.data.message || "Sign-up failed");
       }
     } catch (error: any) {
-      // setMessage("An error ocured during sign-up");
+      setMessage("An error ocured during sign-up:" + error);
     }
   };
   const handleCollegeSelect = (college: string) => {
@@ -68,7 +73,7 @@ const SignUp: React.FC = () => {
       </div>
       <div className="m-4">
         <div>School</div>
-        <SelectT onCollegeSelect={handleCollegeSelect} />
+        <SelectCollege onCollegeSelect={handleCollegeSelect} />
       </div>
 
       <div className="m-4 flex justify-center items-center">

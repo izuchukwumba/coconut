@@ -1,18 +1,18 @@
 const { auth, db } = require("../firebaseConfig");
-const { doc, setDoc } = require("firebase/firestore");
+const { doc, setDoc, updateDoc } = require("firebase/firestore");
 const {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } = require("firebase/auth");
 
-exports.InitialSignUp = async (req, res) => {
-  const { email, confirmPassword, firstName, lastName, school } = req.body;
+exports.initialSignup = async (req, res) => {
+  const { email, password, firstName, lastName, school } = req.body;
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      confirmPassword
+      password
     );
     const user = userCredential.user;
 
@@ -31,7 +31,42 @@ exports.InitialSignUp = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+exports.finalSignup = async (req, res) => {
+  const {
+    uid,
+    dateOfBirth,
+    gender,
+    race,
+    sexualIdentity,
+    major,
+    classification,
+  } = req.body;
 
+  try {
+    if (!uid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "UID is required" });
+    }
+
+    const additionalUserData = {
+      dateOfBirth,
+      gender,
+      race,
+      sexualIdentity,
+      major,
+      classification,
+    };
+    const userRef = doc(db, "user", uid);
+    await updateDoc(userRef, additionalUserData);
+    res.status(201).json({ success: true });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred during final signup.",
+    });
+  }
+};
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {

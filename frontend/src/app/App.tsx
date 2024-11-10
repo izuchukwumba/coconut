@@ -3,6 +3,7 @@ import "./App.css";
 import LandingPage from "./LandingPage";
 import InitialSignUp from "../authentication/InitialSignUp";
 import FinalSignUp from "../authentication/FinalSignUp";
+import HomePage from "./homepage/HomePage";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/initial_signup" element={<InitialSignUp />} />
-        <Route path="/final_signup" element={<FinalSignUp />} />
+        <Route path="/:user_uid/final_signup" element={<FinalSignUp />} />
+        <Route path="/:user_uid/homepage" element={<HomePage />} />
       </Routes>
     </Router>
   );

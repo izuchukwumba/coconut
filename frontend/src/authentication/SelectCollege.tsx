@@ -51,7 +51,6 @@ const SelectCollege: React.FC<SelectCollegeProps> = ({ onCollegeSelect }) => {
 
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
-  console.log(college);
 
   const handleCollegeSelect = (selectedCollege: string) => {
     setCollege(selectedCollege);
