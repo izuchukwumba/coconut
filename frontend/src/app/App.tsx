@@ -3,7 +3,7 @@ import "./App.css";
 import LandingPage from "./LandingPage";
 import InitialSignUp from "../authentication/InitialSignUp";
 import FinalSignUp from "../authentication/FinalSignUp";
-import HomePage from "./homepage/HomePage";
+import HomePage from "../homepage/HomePage";
 
 function App() {
   return (
